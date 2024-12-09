@@ -1,0 +1,133 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    }
+
+\title{Iterated Integrals Aren't Always Easy}
+\author{Nihar Maheshwari}
+\date{November 2024}
+
+\begin{document}
+
+\maketitle
+
+\section{Problem Statement}
+
+Consider the following expression;
+
+$$\int_{b_2}^{\frac{a_2b_2-a_1b_1}{a_2-a_1}} \int_{\frac{y-b_2}{a_1}}^{\frac{y-b_1}{a_2}} f(x,y) \, dx \, dy + \int_{b_1}^{b_2} \int_{\frac{y-b_2}{a_2}}^{\frac{y-b_1}{a_2}} f(x,y) \, dx \, dy+\int_{\frac{a_2b_1-a_1b_2}{a_2-a_1}}^{b_1} \int_{\frac{y-b_2}{a_2}}^{\frac{y-b_1}{a_1}} f(x,y) \, dx \, dy$$
+
+where $a_2>a_1>0$ and $b_2>b_1>0$.
+
+(1) Rewrite the above expression as a sum of two iterated integrals.
+
+(2) Can it be expressed as a single iterated integral with constant limits?
+
+\section{Starting Ideas}
+
+The first serious thing we learn in integral calculus of many variables is probably Fubini's theorem, which allows you to calculate a double integral by converting it into an iterated integral. Here, we will try using Fubini's theorem in reverse to determine the region of the double integral, say $\displaystyle \int \int_R f(x,y) dA$, and rewrite that double integral in different ways. If you don't want to solve the problem and like seeing math pictures, look at \href{https://youtu.be/jNpKKDekS6k?si=dtOFQmNTdBkPqaZY}{How to Set Up Double Integrals}, it is the coolest animation on integrals to date.
+
+\section{The Holy Diagram}
+Back to the problem, the first integral involves two lines in the inner integral; $L_1:y=a_1x+b_2$ and $L_2: y=a_2x+b_1$. Solving for their point of intersection $(x_1,y_1)$ yields $x_1=\displaystyle \frac{b_2-b_1}{a_2-a_1}$ and $y_2=\displaystyle \frac{a_2b_2-a_1b_1}{a_2-a_1}$. It is easy to verify that both of these coordinates are positive and the point lies in the first quadrant. So, the first iterated integral represents the area shaded in figure 1.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{image.png}
+    \caption{Starting Point}
+    \label{fig:enter-label}
+\end{figure}
+Moving on to the second integral, the lines involved are parallel $L_1:y=a_2x+b_1$ and $L_3:y=a_2x+b_2$. The region becomes modified as shown in figure 2.
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{version2.png}
+    \caption{Getting there...}
+    \label{fig:enter-label}
+\end{figure}
+
+The last integral represents another triangular region bounded by $L_3: y=a_2x+b_2$ and $L_4:y=a_1x+b_1$ where, interestingly, the intersection point is $x_2=-x_1=-\displaystyle \frac{b_2-b_1}{a_2-a_1}$ and $y_2=\displaystyle \frac{a_2b_1-a_1b_2}{a_2-a_1}$. This point may lie in the second quadrant or third quadrant, but it doesn't matter because its relative position with respect to the other vertices is fixed i.e. we know visually and we can analytically prove using the given inequalities, that it is the lowest, leftmost point. So our complete figure finally becomes the above parallelogram.
+
+\section{Solving part 1}
+
+The first observation anyone will make here is that one of the diagonals of the parallelogram is vertical. Why is that significant? Because, it allows us to partition the parallelogram into two parts which have a corresponding iterated integral in the order $\mathbf{dy \, dx}$. Draw the relevant arrows to identify the entry and exit curves on your figure to check if you don't believe me. So, we can convert the given expression into a sum of 2 iterated integrals by changing the order of integration! That is a standard exercise that I leave to you. The key takeaway herein is that in a quadrilateral region, whenever there is a diagonal parallel to the axes, you should integrate in that direction first. Your answer ought to be 
+
+$$\int_{-x_1}^{0} \int_{a_1x+b_1}^{a_2x+b_2} f(x,y) \, dy \, dx + \int_{0}^{x_1} \int_{a_2x+b_1}^{a_1x+b_2} f(x,y) \, dy \, dx$$
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{final version.png}
+    \caption{Complete Figure}
+    \label{fig:enter-label}
+\end{figure}
+
+\section{Motivating part 2}
+
+This is the real crux of the problem honestly; if there were marks for this problem, it would probably be distributed as 4 marks for part 1 and 16 marks for part 2. Looking at the region, it is quite clear that you cannot express it as a single iterated integral, much less one with constant limits, because the entry and exit curves are changing. Ah, if only it were a rectangular region instead of a parallelogram, it would've made life so much easier. So, that's exactly what we're going to do. We know that the region of integration changes upon making substitutions. 
+\newline
+
+So the question ultimately becomes, what kind of substitution is required to transform a parallelogram into a square/rectangle? For those who have studied basis and span in linear algebra, they will immediately say a linear transformation shall do the trick. For others, I shall try to motivate this.
+\newline
+
+Suppose we make the change of variables $x=g(u,v),y=h(u,v)$. So, the equations of the boundary lines of our region become $h(u,v)=a_1g(u,v)+b_1$ and so on. We want these equations to be linear in $(u,v)$ so that our new region does not have more complicated curvilinear boundaries in the $u-v$ plane. That is why we make the substitution $x=A_1u+B_1v+C_1,y=A_2u+B_2v+C_2$  where $A_1,A_2,B_1,B_2,C_1,C_2$ are all undetermined coefficients. 
+\newline
+
+We will determine the value of these coefficients by choosing the exact shape we want to transform our parallelogram to. That shape will obviously be a quadrilateral, so for simplicity, let this shape be the unit square in the $u-v$ plane i.e. bounded by the equations $u=0,u=1,v=0,v=1$. So, we must convert $L_1,L_2,L_3,L_4$ into the preceding equations by making the above substitution. This will lead to $8$ simultaneous equations in $6$ variables, obtained by comparing the coefficients of $u$,$v$ of the 4 equations. Two of these equations will be redundant. We will prove this soon.
+\newline
+
+This sounds complicated although it can be done, and a good mathematician is lazy so let's keep thinking. Another way of thinking of this linear substitution is as a function mapping the vertices of the parallelogram $(x,y) \to (u,v)$ i.e. mapping $(x_2,y_2) \to (0,0),(0,b_1) \to (1,0),(x_1,y_1) \to (1,1), (0,b_2) \to (0,1)$. This leads to a system of equations, that is a lot easier to solve; for example, when we plug in $u=0,v=0$ and $x=x_2$ in the linear substitution for $x$, we immediately get $C_1=x_2=-\displaystyle \frac{b_2-b_1}{a_2-a_1}$. Similarly, you can obtain all the other undetermined coefficients very easily.
+\newline
+
+On a side note, there is an interesting way of visualizing this substitution; the position vector of every point in the quadrilateral can be expressed as $\vec{r}= \left<x_1,y_1\right>+u\vec{a}+v\vec{b}$ where $\vec{a}$ and $\vec{b}$ are parallel to the sides of the parallelogram. For convenience, let's set $\vec{a}=(x_2-x_1)\hat{i}+(y_2-y_1)\hat{j}, \vec{b}=(x_4-x_1)\hat{i}+(y_4-y_1)\hat{j}$. This choice of $\vec{a},\vec{b}$ ensures that $0 \leq u \leq 1, 0 \leq v \leq 1$ because we are confined to the interior of the parallelogram and the farthest point we need to map $(x_3,y_3)$ has $(u,v)=(1,1)$. So, we don't need to solve any linear equations and we arrive at the substitution $x=x_1+u(x_2-x_1)+v(x_4-x_1),y=y_1+u(y_2-y_1)+v(y_4-y_1)$ by comparing the components of $\vec{r}=x \hat{i}+y\hat{j}$ with the RHS.
+\newline
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{visual interpretation.png}
+    \caption{Visual Interpretation}
+    \label{fig:enter-label}
+\end{figure}
+
+Now, the paranoid ones among you may be wondering what if the 8 equations are inconsistent? What if the coefficients obtained from the first 6 equations mapping 3 points don't satisfy the mapping for the 4th point? Fear not, there is a concise way of proving that they are always consistent. Suppose, we stick with the above figure and substitution, and we know (1,1) maps to $(x_3,y_3)$ so we obtain $x_3=x_1+(x_2-x_1)+(x_4-x_1),y_3=y_1+(y_2-y_1)+(y_4-y_1)$ which becomes $x_1+x_3=x_2+x_4, y_1+y_3=y_2+y_4$. And, these equations are just the consequence of the fact that the diagonals of a parallelogram bisect each other so we use the midpoint formula on opposite vertices to obtain the above relation and we are done! 
+
+In the case of our problem, the linear transformation, after some calculation, is:
+
+$$x=x_1(u+v-1)$$
+$$y=(b_1-y_2)u+(b_2-y_2)v + y_2$$
+
+So the Jacobian of this transformation is $(a_2-a_1)$.
+
+So, our expression becomes;
+
+$$(a_2-a_1)\int_0^1 \int_0^1 f \left(x_1(u+v-1), (b_1-y_2)u+(b_2-y_2)v+y_2 \right)\, du \, dv $$
+
+As the final cherry on the top, we know that $u$ and $v$ are just dummy variables of integration so we can replace them with $x$ and $y$, and we can rewrite $x_1,y_2$ in terms of $a_1,a_2,b_1,b_2$ to get the final answer. Does the expression look ugly? Yeah, but is the math behind it kind of nice? Definitely.
+
+\section{Concluding Thoughts}
+These linear transformations are quite good at simplifying the region of integration especially in the case of a polygon whose vertices are specified. You can map these vertices to the desired points to simplify the region into one or two iterated integrals. 
+
+For example, in case of a triangle, you can map the points to $(0,0),(0,1),(1,0)$ so that when you integrate along the x direction first, you enter via $y=x$ and exit via $x=1$. In case of a trapezium, you can make the set of parallel sides parallel to either of the axes. In fact, this idea also generalizes to triple integrals where you can transform a parallelepiped region into the unit cube although that is a bit more involved in calculation and visualization. 
+
+Lastly, the main application of the idea explored here, turning quadrilaterals/parallelograms into rectangles/squares has a very nice application in math as a whole; the intuitive proof of the use of the Jacobian in double integral substitutions actually fundamentally relies on that transformation. For all the details, look \href{https://math.stackexchange.com/questions/267267/intuitive-proof-of-multivariable-changing-of-variables-formula-jacobian-withou}{here}. 
+\newline
+
+For curious ones who don't like clicking blue things, I'll outline the basic argument for you. The reason we can't write $dA= dx \, dy = dA'= du \, dv$ directly whenever we make a substitution, is because the value of the fundamental unit of area we're summing up, changes i.e. $dA \neq dA'$. So, we must multiply some positive quantity with $dA$, a kind of scaling factor, to account for this change. We initially had small rectangles of width $dx$, length $dy$ and these become parallelograms when we substitute $x=f(u,v),y=g(u,v)$. You may be wondering, if these units would be more like curvilinear parallelograms, and the answer is no, because when things are so small, everything looks straight. 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Jacobian.jpeg}
+    \caption{How area transforms:}
+    \label{fig:enter-label}
+\end{figure}
+
+Now, let's try figuring out what the components of $\vec{du}$ and $\vec{dv}$ are in the direction of $dx$ and $dy$, so that we can take their cross-product and evaluate the area of the parallelogram. Those who remember the total differential theorem will immediately say, OH THAT'S JUST THE PARTIAL DERIVATIVES WITH RESPECT TO X AND Y. And you are correct; 
+
+$$\vec{du}=\frac{\partial{u}}{\partial{x}} \, dx \,  \hat{i}+\frac{\partial{u}}{\partial{y}} \, dy \, \hat{j}, \vec{dv}=\frac{\partial{v}}{\partial{x}} \, dx \, \hat{i}+\frac{\partial{v}}{\partial{y}} \, dy \, \hat{j}$$ 
+
+Now, taking the modulus of their cross-product to determine the area, we see the Jacobian pop out as our required scaling factor. This is not a rigorous argument and it is in fact, quite limited especially because in the most general case, the infinitesimal area units are trapezoidal,  but it does give you a deeper understanding about what substitutions actually do in multiple integrals, and from one applied math kid to another, I promise you that's what matters. If you want a cool video to look at after this to understand the Jacobian more deeply and didn't understand the article referenced (I barely did), then have a look at this video by Mathemaniac called \href{https://youtu.be/wCZ1VEmVjVo?si=RpTSiYKiLrIdY2TD}{What is Jacobian? | The right way of thinking derivatives and integrals} or for a shorter explanation confined to the Jacobian for polar coordinates alone, look at this video by Serpentine Integral called \href{https://youtu.be/hhFzJvaY__U?si=I8jbUZuOSlrOl1XX}{Change of Variables and the Jacobian}. As bonus content, since you stayed with me till the end, look at this video on converting an iterated integral into a single integral by Morphocular (interestingly, Serpentine Integral is Morphocular's old channel): \href{https://www.youtube.com/watch?v=jNpKKDekS6k}{How to do two (or more) integrals with just one}.
+
+
+
+\end{document}
